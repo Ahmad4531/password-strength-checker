@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار قوة كلمة المرور</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            direction: rtl;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 28px;
+            color: #1e3c72;
+            margin-bottom: 20px;
+        }
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        #result {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            width: 0;
+            transition: width 0.4s ease, background-color 0.4s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>اختبار قوة كلمة المرور</h1>
+        <input type="password" id="password" placeholder="أدخل كلمة المرور">
+        <div id="result">أدخل كلمة مرور</div>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+    </div>
+
+    <script>
+        // التأكد من تحميل DOM قبل تشغيل الكود
+        document.addEventListener('DOMContentLoaded', () => {
+            const passwordInput = document.getElementById('password');
+            const result = document.getElementById('result');
+            const progress = document.getElementById('progress');
+
+            // التحقق من وجود العناصر
+            if (!passwordInput || !result || !progress) {
+                console.error("أحد العناصر مفقود في الصفحة!");
+                return;
+            }
+
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+
+                if (!password) {
+                    result.textContent = "أدخل كلمة مرور";
+                    result.style.color = "#333";
+                    progress.style.width = "0%";
+                    progress.style.backgroundColor = "#e0e0e0";
+                    return;
+                }
+
+                // تقييم الطول
+                const lengthScore = password.length < 8 ? 0 : password.length < 12 ? 1 : 2;
+
+                // تقييم التنوع
+                let varietyScore = 0;
+                if (/[A-Z]/.test(password)) varietyScore++;
+                if (/[a-z]/.test(password)) varietyScore++;
+                if (/\d/.test(password)) varietyScore++;
+                if (/[!@#$%^&*]/.test(password)) varietyScore++;
+
+                // حساب النسبة
+                const strengthPercentage = Math.min(100, (lengthScore * 30) + (varietyScore * 17.5));
+
+                // تحديد القوة
+                if (lengthScore === 0 || varietyScore <= 2) {
+                    result.textContent = "ضعيفة";
+                    result.style.color = "#e63946";
+                    progress.style.width = ${strengthPercentage}%;
+                    progress.style.backgroundColor = "#e63946";
+                } else if (lengthScore === 1 && varietyScore === 3) {
+                    result.textContent = "متوسطة";
+                    result.style.color = "#f4a261";
+                    progress.style.width = ${strengthPercentage}%;
+                    progress.style.backgroundColor = "#f4a261";
+                } else if (lengthScore === 2 && varietyScore === 4) {
+                    result.textContent = "قوية";
+                    result.style.color = "#2a9d8f";
+                    progress.style.width = "100%";
+                    progress.style.backgroundColor = "#2a9d8f";
+                } else {
+                    result.textContent = "ضعيفة";
+                    result.style.color = "#e63946";
+                    progress.style.width = ${strengthPercentage}%;
+                    progress.style.backgroundColor = "#e63946";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
